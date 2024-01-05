@@ -144,7 +144,7 @@ impl<'index> Updater<'_> {
           )?;
       }
 
-      if SHUTTING_DOWN.load(atomic::Ordering::Relaxed) {
+      if SHUTTING_DOWN.load(atomic::Ordering::Relaxed) || self.height == self.index.options.chain().jubilee_height() - 1 {
         break;
       }
     }
