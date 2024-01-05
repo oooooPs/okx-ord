@@ -1,4 +1,4 @@
-use crate::okx::datastore::brc20::Brc20ReaderWriter;
+use crate::okx::datastore::brc20::{Brc20ReaderWriter, Receipt};
 use crate::okx::protocol::context::Context;
 use anyhow::anyhow;
 use bitcoin::Txid;
@@ -14,8 +14,8 @@ impl CallManager {
     Self {}
   }
 
-  pub fn execute_message(&self, context: &mut Context, txid: &Txid, msgs: &[Message]) -> Result {
-    let mut receipts = vec![];
+  pub fn execute_message(&self, context: &mut Context, txid: &Txid, msgs: &[Message], receipts: &mut Vec<Receipt>) -> Result {
+    // let mut receipts = vec![];
     // execute message
     for msg in msgs {
       match msg {

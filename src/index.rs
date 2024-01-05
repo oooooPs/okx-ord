@@ -221,7 +221,7 @@ pub struct Index {
   index_runes: bool,
   index_sats: bool,
   index_transactions: bool,
-  options: Options,
+  pub options: Options,
   path: PathBuf,
   started: DateTime<Utc>,
   unrecoverably_reorged: AtomicBool,

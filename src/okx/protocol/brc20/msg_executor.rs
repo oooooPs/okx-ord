@@ -227,7 +227,7 @@ fn process_mint(context: &mut Context, msg: &ExecutionMessage, mint: Mint) -> Re
 
   // store to database.
   context
-    .update_token_balance(&to_script_key, balance)
+    .update_token_balance(&to_script_key, balance.clone())
     .map_err(|e| Error::LedgerError(e))?;
 
   // update token minted.
@@ -240,6 +240,8 @@ fn process_mint(context: &mut Context, msg: &ExecutionMessage, mint: Mint) -> Re
     tick: token_info.tick,
     amount: amt.checked_to_u128()?,
     msg: out_msg,
+    balance,
+    minted,
   }))
 }
 
@@ -294,7 +296,7 @@ fn process_inscribe_transfer(
 
   let amt = amt.checked_to_u128()?;
   context
-    .update_token_balance(&to_script_key, balance)
+    .update_token_balance(&to_script_key, balance.clone())
     .map_err(|e| Error::LedgerError(e))?;
 
   let inscription = TransferableLog {
@@ -322,6 +324,7 @@ fn process_inscribe_transfer(
   Ok(Event::InscribeTransfer(InscripbeTransferEvent {
     tick: inscription.tick,
     amount: amt,
+    balance,
   }))
 }
 
@@ -362,7 +365,7 @@ fn process_transfer(context: &mut Context, msg: &ExecutionMessage) -> Result<Eve
   from_balance.transferable_balance = from_transferable;
 
   context
-    .update_token_balance(&msg.from, from_balance)
+    .update_token_balance(&msg.from, from_balance.clone())
     .map_err(|e| Error::LedgerError(e))?;
 
   // redirect receiver to sender if transfer to conibase.
@@ -386,7 +389,7 @@ fn process_transfer(context: &mut Context, msg: &ExecutionMessage) -> Result<Eve
   to_balance.overall_balance = to_overall.checked_add(&amt)?.checked_to_u128()?;
 
   context
-    .update_token_balance(&to_script_key, to_balance)
+    .update_token_balance(&to_script_key, to_balance.clone())
     .map_err(|e| Error::LedgerError(e))?;
 
   context
@@ -401,5 +404,7 @@ fn process_transfer(context: &mut Context, msg: &ExecutionMessage) -> Result<Eve
     msg: out_msg,
     tick: token_info.tick,
     amount: amt.checked_to_u128()?,
+    balance: from_balance,
+    to_balance,
   }))
 }

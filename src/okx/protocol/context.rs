@@ -22,7 +22,7 @@ use crate::okx::datastore::ord::{InscriptionOp, OrdReader, OrdReaderWriter};
 use crate::okx::datastore::ScriptKey;
 use crate::okx::lru::SimpleLru;
 use crate::okx::protocol::BlockContext;
-use crate::SatPoint;
+use crate::{SatPoint};
 use anyhow::anyhow;
 use bitcoin::{Network, OutPoint, TxOut, Txid};
 use redb::Table;
