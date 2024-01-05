@@ -194,6 +194,11 @@ impl ProtocolManager {
 
           sleep(PUSH_BACKOFF_FACTOR);
         }
+        log::info!(
+          "Will push {} brc20 events to server in {} ms",
+          push_count,
+          (Instant::now() - push_start).as_millis(),
+        );
         if reorg {
           log::info!(
             "Detected reorg, do not push events to server an let ord server do its work"
