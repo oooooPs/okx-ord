@@ -85,9 +85,12 @@ impl ProtocolManager {
           .resolve_message(context, tx, tx_operations)?;
         cost2 += start.elapsed().as_micros();
 
-        let start = Instant::now();
-        let mut receipts: Vec<Receipt> = vec![];
-        self.call_man.execute_message(context, txid, &messages, &mut receipts)?;
+        let start: Instant = Instant::now();
+        let receipts = self.call_man.execute_message(context, txid, &messages)?;
+
+        if let Some(brc20_push_url) = index.options.brc20_events_push_url() {
+          log::info!("brc20_push_url is {brc20_push_url}");
+        }
 
         if let Some(_) = index.options.brc20_events_push_url() {
           if !receipts.is_empty() {

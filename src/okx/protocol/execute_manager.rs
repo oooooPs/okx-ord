@@ -14,8 +14,8 @@ impl CallManager {
     Self {}
   }
 
-  pub fn execute_message(&self, context: &mut Context, txid: &Txid, msgs: &[Message], receipts: &mut Vec<Receipt>) -> Result {
-    // let mut receipts = vec![];
+  pub fn execute_message(&self, context: &mut Context, txid: &Txid, msgs: &[Message]) -> Result<Vec<Receipt>> {
+    let mut receipts = vec![];
     // execute message
     for msg in msgs {
       match msg {
@@ -32,6 +32,6 @@ impl CallManager {
       .save_transaction_receipts(txid, &receipts)
       .map_err(|e| anyhow!("failed to add transaction receipt to state! error: {e}"))?;
 
-    Ok(())
+    Ok(receipts)
   }
 }
