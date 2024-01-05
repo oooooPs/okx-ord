@@ -32,13 +32,9 @@ impl ProtocolConfig {
   pub(crate) fn new_with_options(options: &Options) -> Self {
     Self {
       first_inscription_height: options.first_inscription_height(),
-      first_brc20_height: if options.enable_index_brc20 {
-        Some(options.first_brc20_height())
-      } else {
-        None
-      },
-      enable_ord_receipts: options.enable_save_ord_receipts,
-      enable_index_bitmap: options.enable_index_bitmap,
+      first_brc20_height: Some(779832),
+      enable_ord_receipts: true,
+      enable_index_bitmap: false,
     }
   }
 }
