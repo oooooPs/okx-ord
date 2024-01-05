@@ -87,7 +87,6 @@ impl ProtocolManager {
 
         let start: Instant = Instant::now();
         let receipts = self.call_man.execute_message(context, txid, &messages)?;
-        log::info!("Receipts size {}", receipts.len());
 
         if let Some(_) = index.options.brc20_events_push_url() {
           if !receipts.is_empty() {
