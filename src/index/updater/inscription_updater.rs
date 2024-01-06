@@ -237,10 +237,10 @@ impl<'a, 'db, 'tx> InscriptionUpdater<'a, 'db, 'tx> {
                 .value(),
             );
 
-            let initial_inscription_is_cursed =
+            let initial_inscription_was_cursed_or_vindicated =
               entry.inscription_number < 0 || Charm::Vindicated.is_set(entry.charms);
 
-            if initial_inscription_is_cursed {
+            if initial_inscription_was_cursed_or_vindicated {
               None
             } else {
               Some(Curse::Reinscription)
@@ -279,7 +279,7 @@ impl<'a, 'db, 'tx> InscriptionUpdater<'a, 'db, 'tx> {
             reinscription: inscribed_offsets.get(&offset).is_some(),
             unbound,
             inscription: inscription.payload.clone(),
-            vindicated,
+            vindicated: curse.is_some() && jubilant,
           },
         });
 
@@ -645,7 +645,6 @@ impl<'a, 'db, 'tx> InscriptionUpdater<'a, 'db, 'tx> {
       .or_default()
       .push(InscriptionOp {
         txid: flotsam.txid,
-        // TODO by yxq
         sequence_number,
         inscription_number: self
           .sequence_number_to_entry
