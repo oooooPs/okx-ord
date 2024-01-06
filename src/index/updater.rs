@@ -1,5 +1,5 @@
 use crate::okx::protocol::{context::Context, BlockContext, ProtocolConfig, ProtocolManager};
-use std::sync::atomic::{AtomicUsize, Ordering};
+use std::{sync::atomic::{AtomicUsize, Ordering}, thread::sleep};
 use {
   self::{inscription_updater::InscriptionUpdater, rune_updater::RuneUpdater},
   super::{fetcher::Fetcher, *},
@@ -143,9 +143,20 @@ impl<'index> Updater<'_> {
               .unwrap_or(0),
           )?;
       }
-      log::info!("jubilee_height is {}", self.index.options.chain().jubilee_height());
 
-      if SHUTTING_DOWN.load(atomic::Ordering::Relaxed) || self.height == self.index.options.chain().jubilee_height() - 1 {
+      if self.height == self.index.options.chain().jubilee_height() - 1 {
+        loop {
+          if !SHUTTING_DOWN.load(atomic::Ordering::Relaxed) {
+            log::info!("Near jubilee height, waiting for shutdown signal");
+            sleep(Duration::from_secs(5));
+            continue;
+          } else {
+            break;
+          }
+        }
+      }
+
+      if SHUTTING_DOWN.load(atomic::Ordering::Relaxed) {
         break;
       }
     }
