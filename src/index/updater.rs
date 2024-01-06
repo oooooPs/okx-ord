@@ -143,6 +143,7 @@ impl<'index> Updater<'_> {
               .unwrap_or(0),
           )?;
       }
+      log::info!("jubilee_height is {}", self.index.options.chain().jubilee_height());
 
       if SHUTTING_DOWN.load(atomic::Ordering::Relaxed) || self.height == self.index.options.chain().jubilee_height() - 1 {
         break;
