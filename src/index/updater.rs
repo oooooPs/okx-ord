@@ -144,17 +144,17 @@ impl<'index> Updater<'_> {
           )?;
       }
 
-      if self.height == self.index.options.chain().jubilee_height() - 1 {
-        loop {
-          if !SHUTTING_DOWN.load(atomic::Ordering::Relaxed) {
-            log::info!("Near jubilee height, waiting for shutdown signal");
-            sleep(Duration::from_secs(5));
-            continue;
-          } else {
-            break;
-          }
-        }
-      }
+      // if self.height == self.index.options.chain().jubilee_height() - 1 {
+      //   loop {
+      //     if !SHUTTING_DOWN.load(atomic::Ordering::Relaxed) {
+      //       log::info!("Near jubilee height, waiting for shutdown signal");
+      //       sleep(Duration::from_secs(5));
+      //       continue;
+      //     } else {
+      //       break;
+      //     }
+      //   }
+      // }
 
       if SHUTTING_DOWN.load(atomic::Ordering::Relaxed) {
         break;
