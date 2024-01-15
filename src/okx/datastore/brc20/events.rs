@@ -51,6 +51,7 @@ pub struct InscripbeTransferEvent {
   pub tick: Tick,
   pub amount: u128,
   pub balance: Balance,
+  pub minted: u128,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
@@ -60,6 +61,7 @@ pub struct TransferEvent {
   pub msg: Option<String>,
   pub balance: Balance,
   pub to_balance: Balance,
+  pub minted: u128,
 }
 
 #[cfg(test)]

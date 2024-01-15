@@ -325,6 +325,7 @@ fn process_inscribe_transfer(
     tick: inscription.tick,
     amount: amt,
     balance,
+    minted: Into::<Num>::into(token_info.minted).checked_to_u128()?,
   }))
 }
 
@@ -406,5 +407,6 @@ fn process_transfer(context: &mut Context, msg: &ExecutionMessage) -> Result<Eve
     amount: amt.checked_to_u128()?,
     balance: from_balance,
     to_balance,
+    minted: Into::<Num>::into(token_info.minted).checked_to_u128()?,
   }))
 }
