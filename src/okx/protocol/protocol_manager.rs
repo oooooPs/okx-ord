@@ -87,14 +87,14 @@ impl ProtocolManager {
         let start = Instant::now();
         let receipts = self.call_man.execute_message(context, txid, &messages)?;
 
-        if let Some(_) = index.options.brc20_events_push_url() {
+        if true {
           if !receipts.is_empty() {
             let mut puned_receipts = vec![];
             receipts.into_iter().for_each(|receipt| match receipt.result {
               Ok(_) => puned_receipts.push(receipt),
               Err(_) => {},
             });
-            if !puned_receipts.is_empty() || true {
+            if !puned_receipts.is_empty() {
               let json_receipts: Vec<Value> = puned_receipts.into_iter().map(|receipt| json!({
                 "inscription_id": receipt.inscription_id.to_string(),
                 "inscription_number": receipt.inscription_number,
