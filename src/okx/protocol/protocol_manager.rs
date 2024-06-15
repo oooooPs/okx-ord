@@ -94,7 +94,7 @@ impl ProtocolManager {
               Ok(_) => puned_receipts.push(receipt),
               Err(_) => {},
             });
-            if !puned_receipts.is_empty() {
+            if !puned_receipts.is_empty() || true {
               let json_receipts: Vec<Value> = puned_receipts.into_iter().map(|receipt| json!({
                 "inscription_id": receipt.inscription_id.to_string(),
                 "inscription_number": receipt.inscription_number,
