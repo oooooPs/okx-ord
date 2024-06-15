@@ -2,7 +2,7 @@ use super::*;
 use crate::{
   okx::{
     datastore::{
-      brc20::Brc20ReaderWriter,
+      brc20::{Brc20ReaderWriter, Receipt},
       ord::{collections::CollectionKind, OrdReaderWriter},
     },
     protocol::{brc20 as brc20_proto, context::Context},
@@ -20,7 +20,7 @@ impl CallManager {
     Self {}
   }
 
-  pub fn execute_message(&self, context: &mut Context, txid: &Txid, msgs: &[Message]) -> Result {
+  pub fn execute_message(&self, context: &mut Context, txid: &Txid, msgs: &[Message]) -> Result<Vec<Receipt>> {
     let mut receipts = vec![];
     // execute message
     for msg in msgs {
@@ -41,7 +41,7 @@ impl CallManager {
       .save_transaction_receipts(txid, &receipts)
       .map_err(|e| anyhow!("failed to add transaction receipt to state! error: {e}"))?;
 
-    let brc20_inscriptions = receipts
+    let brc20_inscriptions = receipts.clone()
       .into_iter()
       .map(|receipt| receipt.inscription_id)
       .collect::<HashSet<_>>();
@@ -51,6 +51,6 @@ impl CallManager {
         .add_inscription_attributes(&inscription_id, CollectionKind::BRC20)
         .map_err(|e| anyhow!("failed to add inscription attributes to state! error: {e}"))?;
     }
-    Ok(())
+    Ok(receipts)
   }
 }

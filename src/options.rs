@@ -89,6 +89,8 @@ pub struct Options {
     help = "Don't look for BRC20 messages below <FIRST_BRC20_HEIGHT>."
   )]
   pub(crate) first_brc20_height: Option<u32>,
+  #[clap(long, help = "Brc20 events will be pushed to <BRC20_EVENTS_PUSH_URL>.")]
+  pub(crate) brc20_events_push_url: Option<String>,
   #[clap(long, default_value = "200", help = "DB commit interval.")]
   pub(crate) commit_height_interval: u64,
   #[clap(
@@ -131,6 +133,13 @@ impl Options {
       Chain::Testnet
     } else {
       self.chain_argument
+    }
+  }
+
+  pub(crate) fn brc20_events_push_url(&self) -> Option<String> {
+    match &self.brc20_events_push_url {
+      Some(url) => Some(url.to_string()),
+      None => None
     }
   }
 
