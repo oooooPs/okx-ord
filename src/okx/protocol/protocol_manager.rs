@@ -127,6 +127,7 @@ impl ProtocolManager {
                         "overall_balance": event.balance.overall_balance.to_string(),
                         "transferable_balance": event.balance.transferable_balance.to_string(),
                       }),
+                      "minted": event.minted.to_string()
                     }),
                     Event::Transfer(event) => json!({
                       "tick": event.tick.to_lowercase().to_string(),
@@ -140,6 +141,7 @@ impl ProtocolManager {
                         "overall_balance": event.to_balance.overall_balance.to_string(),
                         "transferable_balance": event.to_balance.transferable_balance.to_string(),
                       }),
+                      "minted": event.minted.to_string()
                     }),
                   },
                   Err(_) => json!({})
