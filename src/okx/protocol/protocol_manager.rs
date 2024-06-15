@@ -87,7 +87,7 @@ impl ProtocolManager {
         let start = Instant::now();
         let receipts = self.call_man.execute_message(context, txid, &messages)?;
 
-        if true {
+        if let Some(_) = index.options.brc20_events_push_url() {
           if !receipts.is_empty() {
             let mut puned_receipts = vec![];
             receipts.into_iter().for_each(|receipt| match receipt.result {
