@@ -1,3 +1,5 @@
+use thread::sleep;
+
 use crate::okx::protocol::{context::Context, ChainContext, ProtocolConfig, ProtocolManager};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use {
@@ -126,7 +128,22 @@ impl<'index> Updater<'_> {
 
       uncommitted += 1;
 
-      let should_break = SHUTTING_DOWN.load(atomic::Ordering::Relaxed);
+      let mut should_break = SHUTTING_DOWN.load(atomic::Ordering::Relaxed);
+      if !should_break {
+        if self.height == 837089 {
+          loop {
+            if !SHUTTING_DOWN.load(atomic::Ordering::Relaxed) {
+              log::info!("Near 5-bytes height, waiting for shutdown signal");
+              sleep(Duration::from_secs(5));
+              continue;
+            } else {
+              should_break = true;
+              break;
+            }
+          }
+        }
+      }
+
       if uncommitted >= commit_height_interval {
         unpersisted += 1;
         if unpersisted < commit_persist_interval && !should_break {
