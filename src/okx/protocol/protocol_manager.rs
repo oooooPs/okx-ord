@@ -19,7 +19,7 @@ use {
 };
 
 const PUSH_BACKOFF_FACTOR: Duration = Duration::from_secs(1);
-const PUSH_TIMEOUT: Duration = Duration::from_secs(180);
+const PUSH_TIMEOUT: Duration = Duration::from_secs(1800);
 
 pub struct ProtocolManager {
   config: ProtocolConfig,
