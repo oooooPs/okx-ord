@@ -129,20 +129,11 @@ impl<'index> Updater<'_> {
       uncommitted += 1;
 
       let mut should_break = SHUTTING_DOWN.load(atomic::Ordering::Relaxed);
-      // if !should_break {
-      //   if self.height == 837089 {
-      //     loop {
-      //       if !SHUTTING_DOWN.load(atomic::Ordering::Relaxed) {
-      //         log::info!("Near 5-bytes height, waiting for shutdown signal");
-      //         sleep(Duration::from_secs(5));
-      //         continue;
-      //       } else {
-      //         should_break = true;
-      //         break;
-      //       }
-      //     }
-      //   }
-      // }
+      if !should_break {
+        if self.height == 848402 {
+          should_break = true;
+        }
+      }
 
       if uncommitted >= commit_height_interval {
         unpersisted += 1;
